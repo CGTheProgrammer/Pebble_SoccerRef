@@ -1,20 +1,23 @@
 #include <pebble.h>
 
 static Window *window;
-static TextLayer *text_layer;
+static TextLayer *team1_name_text_layer;
+static TextLayer *team1_score_text_layer;
+static TextLayer *team2_name_text_layer;
+static TextLayer *team2_score_text_layer;
 int team1Score;
 int team2Score;
 
 static void select_click_handler(ClickRecognizerRef recognizer, void *context) {
-  text_layer_set_text(text_layer, "Select");
+  
 }
 
 static void up_click_handler(ClickRecognizerRef recognizer, void *context) {
-  text_layer_set_text(text_layer, "Up");
+  team1Score++;
 }
 
 static void down_click_handler(ClickRecognizerRef recognizer, void *context) {
-  text_layer_set_text(text_layer, "Down");
+  team2Score++;
 }
 
 static void click_config_provider(void *context) {
@@ -29,14 +32,25 @@ static void window_load(Window *window) {
 	team1Score = 0;
 	team2Score = 0;
 
-  text_layer = text_layer_create((GRect) { .origin = { 0, 72 }, .size = { bounds.size.w, 20 } });
-  text_layer_set_text(text_layer, "Press a button");
-  text_layer_set_text_alignment(text_layer, GTextAlignmentCenter);
-  layer_add_child(window_layer, text_layer_get_layer(text_layer));
+  team1_name_text_layer = text_layer_create((GRect) { .origin = { 10, 5 }, .size = { bounds.size.w, 20 } });
+	team1_score_text_layer = text_layer_create((GRect) { .origin = { 120, 5 }, .size = { bounds.size.w, 20 } });
+	team2_name_text_layer = text_layer_create((GRect) { .origin = { 10, 145 }, .size = { bounds.size.w, 20 } });
+	team2_score_text_layer = text_layer_create((GRect) { .origin = { 120, 145 }, .size = { bounds.size.w, 20 } });
+  text_layer_set_text(team1_name_text_layer, "Team1");
+	text_layer_set_text(team1_score_text_layer, "0");
+	text_layer_set_text(team2_name_text_layer, "Team2");
+	text_layer_set_text(team2_score_text_layer, "0");
+  layer_add_child(window_layer, text_layer_get_layer(team1_name_text_layer));
+	layer_add_child(window_layer, text_layer_get_layer(team1_score_text_layer));
+	layer_add_child(window_layer, text_layer_get_layer(team2_name_text_layer));
+	layer_add_child(window_layer, text_layer_get_layer(team2_score_text_layer));
 }
 
 static void window_unload(Window *window) {
-  text_layer_destroy(text_layer);
+  text_layer_destroy(team1_name_text_layer);
+	text_layer_destroy(team1_score_text_layer);
+	text_layer_destroy(team2_name_text_layer);
+	text_layer_destroy(team2_score_text_layer);
 }
 
 static void init(void) {
