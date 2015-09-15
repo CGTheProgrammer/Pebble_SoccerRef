@@ -1,0 +1,23 @@
+{
+    "appKeys": {},
+    "capabilities": [
+        ""
+    ],
+    "companyName": "cris.rules@icloud.com",
+    "longName": "SoccerReferee",
+    "projectType": "native",
+    "resources": {
+        "media": []
+    },
+    "sdkVersion": "3",
+    "shortName": "SoccerReferee",
+    "targetPlatforms": [
+        "aplite",
+        "basalt"
+    ],
+    "uuid": "653cad22-4ad2-441b-b862-9d7c54d41b43",
+    "versionLabel": "1.0",
+    "watchapp": {
+        "watchface": false
+    }
+}
