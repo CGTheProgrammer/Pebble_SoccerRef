@@ -13,7 +13,7 @@ char *itoa1(int num){
   int i = 0, temp_num = num, length = 0;
   char *string = buff;
 
-  if(num > 0) {  
+  if(num > 0) {
 		// count how many characters in the number
     while(temp_num) {
       temp_num /= 10;
@@ -36,7 +36,7 @@ char *itoa2(int num){
   int i = 0, temp_num = num, length = 0;
   char *string = buff;
 
-  if(num > 0) {  
+  if(num > 0) {
 		// count how many characters in the number
     while(temp_num) {
       temp_num /= 10;
@@ -55,7 +55,7 @@ char *itoa2(int num){
 }
 
 static void select_click_handler(ClickRecognizerRef recognizer, void *context) {
-  
+
 }
 
 static void up_click_handler(ClickRecognizerRef recognizer, void *context) {
@@ -80,10 +80,10 @@ static void window_load(Window *window) {
 	team1Score = 0;
 	team2Score = 0;
 
-  team1_name_text_layer = text_layer_create((GRect) { .origin = { 10, 5 }, .size = { bounds.size.w, 20 } });
+  team1_name_text_layer = text_layer_create((GRect) { .origin = { bounds.size.w/10, bounds.size.h/20 }, .size = { bounds.size.w, 20 } });
 	team1_score_text_layer = text_layer_create((GRect) { .origin = { 120, 5 }, .size = { bounds.size.w, 20 } });
-	team2_name_text_layer = text_layer_create((GRect) { .origin = { 10, 145 }, .size = { bounds.size.w, 20 } });
-	team2_score_text_layer = text_layer_create((GRect) { .origin = { 120, 145 }, .size = { bounds.size.w, 20 } });
+	team2_name_text_layer = text_layer_create((GRect) { .origin = { bounds.size.w/10, 125 }, .size = { bounds.size.w, 20 } });
+	team2_score_text_layer = text_layer_create((GRect) { .origin = { 120, 125 }, .size = { bounds.size.w, 20 } });
   text_layer_set_text(team1_name_text_layer, "Team1");
 	text_layer_set_text(team1_score_text_layer, "0");
 	text_layer_set_text(team2_name_text_layer, "Team2");
