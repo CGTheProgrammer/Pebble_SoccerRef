@@ -80,10 +80,14 @@ static void window_load(Window *window) {
 	team1Score = 0;
 	team2Score = 0;
 
-  team1_name_text_layer = text_layer_create((GRect) { .origin = { bounds.size.w/10, bounds.size.h/20 }, .size = { bounds.size.w, 20 } });
-	team1_score_text_layer = text_layer_create((GRect) { .origin = { 120, 5 }, .size = { bounds.size.w, 20 } });
-	team2_name_text_layer = text_layer_create((GRect) { .origin = { bounds.size.w/10, 125 }, .size = { bounds.size.w, 20 } });
-	team2_score_text_layer = text_layer_create((GRect) { .origin = { 120, 125 }, .size = { bounds.size.w, 20 } });
+  team1_name_text_layer = text_layer_create((GRect) { .origin = { bounds.size.w/10, bounds.size.h/20 }, .size = { bounds.size.w, 25 } });
+	team1_score_text_layer = text_layer_create((GRect) { .origin = { bounds.size.w/10 * 9, bounds.size.h/20 }, .size = { bounds.size.w, 25 } });
+	team2_name_text_layer = text_layer_create((GRect) { .origin = { bounds.size.w/10, bounds.size.h/20 * 16 }, .size = { bounds.size.w, 25 } });
+	team2_score_text_layer = text_layer_create((GRect) { .origin = { bounds.size.w/10 * 9, bounds.size.h/20 * 16 }, .size = { bounds.size.w, 25 } });	
+  text_layer_set_font(team1_name_text_layer, fonts_get_system_font(FONT_KEY_GOTHIC_24));
+  text_layer_set_font(team1_score_text_layer, fonts_get_system_font(FONT_KEY_GOTHIC_24));
+  text_layer_set_font(team2_name_text_layer, fonts_get_system_font(FONT_KEY_GOTHIC_24));
+  text_layer_set_font(team2_score_text_layer, fonts_get_system_font(FONT_KEY_GOTHIC_24));
   text_layer_set_text(team1_name_text_layer, "Team1");
 	text_layer_set_text(team1_score_text_layer, "0");
 	text_layer_set_text(team2_name_text_layer, "Team2");
