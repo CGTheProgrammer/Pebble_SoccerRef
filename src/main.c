@@ -1,5 +1,9 @@
 #include <pebble.h>
 
+#define TEAM1_PSCORE 0
+#define TEAM2_PSCORE 0
+#define DEFAULT_SCORE 0
+
 static Window *window;
 static TextLayer *team1_name_text_layer;
 static TextLayer *team1_score_text_layer;
@@ -83,7 +87,7 @@ static void window_load(Window *window) {
   team1_name_text_layer = text_layer_create((GRect) { .origin = { bounds.size.w/10, bounds.size.h/20 }, .size = { bounds.size.w, 25 } });
 	team1_score_text_layer = text_layer_create((GRect) { .origin = { bounds.size.w/10 * 9, bounds.size.h/20 }, .size = { bounds.size.w, 25 } });
 	team2_name_text_layer = text_layer_create((GRect) { .origin = { bounds.size.w/10, bounds.size.h/20 * 16 }, .size = { bounds.size.w, 25 } });
-	team2_score_text_layer = text_layer_create((GRect) { .origin = { bounds.size.w/10 * 9, bounds.size.h/20 * 16 }, .size = { bounds.size.w, 25 } });	
+	team2_score_text_layer = text_layer_create((GRect) { .origin = { bounds.size.w/10 * 9, bounds.size.h/20 * 16 }, .size = { bounds.size.w, 25 } });
   text_layer_set_font(team1_name_text_layer, fonts_get_system_font(FONT_KEY_GOTHIC_24));
   text_layer_set_font(team1_score_text_layer, fonts_get_system_font(FONT_KEY_GOTHIC_24));
   text_layer_set_font(team2_name_text_layer, fonts_get_system_font(FONT_KEY_GOTHIC_24));
@@ -106,6 +110,9 @@ static void window_unload(Window *window) {
 }
 
 static void init(void) {
+  team1Score = persist_exists(TEAM1_PSCORE) ? persist_read_int(TEAM1_PSCORE) : DEFAULT_SCORE;
+  team2Score = persist_exists(TEAM2_PSCORE) ? persist_read_int(TEAM2_PSCORE) : DEFAULT_SCORE;
+
   window = window_create();
   window_set_click_config_provider(window, click_config_provider);
   window_set_window_handlers(window, (WindowHandlers) {
@@ -117,6 +124,9 @@ static void init(void) {
 }
 
 static void deinit(void) {
+  persist_write_int(TEAM1_PSCORE, team1Score);
+  persist_write_int(TEAM2_PSCORE, team2Score);
+
   window_destroy(window);
 }
 
