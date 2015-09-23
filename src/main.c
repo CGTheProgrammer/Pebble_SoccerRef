@@ -1,7 +1,7 @@
 #include <pebble.h>
 
-#define TEAM1_PSCORE 0
-#define TEAM2_PSCORE 0
+#define TEAM1_PSCORE 1
+#define TEAM2_PSCORE 2
 #define DEFAULT_SCORE 0
 
 static Window *window;
@@ -61,6 +61,7 @@ char *itoa2(int num){
 }
 
 static void select_click_handler(ClickRecognizerRef recognizer, void *context) {
+  // Pause Time
 
 }
 
