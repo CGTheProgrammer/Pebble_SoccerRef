@@ -9,11 +9,36 @@ static TextLayer *team1_name_text_layer;
 static TextLayer *team1_score_text_layer;
 static TextLayer *team2_name_text_layer;
 static TextLayer *team2_score_text_layer;
+static TextLayer *gameTime_text_layer;
+static TextLayer *gameHalf_text_layer;
 int team1Score;
 int team2Score;
+int timeLeft;
+int gameHalf;
 
-// Converts an int to a string
-char *itoa1(int num){
+static void update_time() {
+  // Get a tm structure
+  time_t temp = time(NULL); 
+  struct tm *tick_time = localtime(&temp);
+
+  // Create a long-lived buffer
+  static char buffer[] = "00:00";
+
+  // Write the current hours and minutes into the buffer
+  if(clock_is_24h_style() == true) {
+    //Use 12h hour format
+    strftime(buffer, sizeof("00:00"), "%H:%M", tick_time);
+  } else {
+    //Use 12 hour format
+    strftime(buffer, sizeof("00:00"), "%I:%M", tick_time);
+  }
+
+  // Display this time on the TextLayer
+  text_layer_set_text(gameTime_text_layer, buffer);
+}
+
+// Converts team1 score to a string
+char *convertTeam1Score(int num){
   static char buff[20] = {};
   int i = 0, temp_num = num, length = 0;
   char *string = buff;
@@ -36,8 +61,8 @@ char *itoa1(int num){
   return string;
 }
 
-// Converts an int to a string
-char *itoa2(int num){
+// Converts team2 score to a string
+char *convertTeam2Score(int num){
   static char buff[20] = {};
   int i = 0, temp_num = num, length = 0;
   char *string = buff;
@@ -67,12 +92,12 @@ static void select_click_handler(ClickRecognizerRef recognizer, void *context) {
 
 static void up_click_handler(ClickRecognizerRef recognizer, void *context) {
   team1Score++;
-	text_layer_set_text(team1_score_text_layer, itoa1(team1Score));
+	text_layer_set_text(team1_score_text_layer, convertTeam1Score(team1Score));
 }
 
 static void down_click_handler(ClickRecognizerRef recognizer, void *context) {
   team2Score++;
-	text_layer_set_text(team2_score_text_layer, itoa2(team2Score));
+	text_layer_set_text(team2_score_text_layer, convertTeam2Score(team2Score));
 }
 
 static void click_config_provider(void *context) {
@@ -86,28 +111,35 @@ static void window_load(Window *window) {
   GRect bounds = layer_get_bounds(window_layer);
 
   // Create Text Layers
-  team1_name_text_layer = text_layer_create((GRect) { .origin = { bounds.size.w/10, bounds.size.h/20 }, .size = { bounds.size.w, 25 } });
-	team1_score_text_layer = text_layer_create((GRect) { .origin = { bounds.size.w/10 * 9, bounds.size.h/20 }, .size = { bounds.size.w, 25 } });
-	team2_name_text_layer = text_layer_create((GRect) { .origin = { bounds.size.w/10, bounds.size.h/20 * 16 }, .size = { bounds.size.w, 25 } });
+  team1_name_text_layer = text_layer_create((GRect)  { .origin = { bounds.size.w/10,     bounds.size.h/20 },      .size = { bounds.size.w, 25 } });
+	team1_score_text_layer = text_layer_create((GRect) { .origin = { bounds.size.w/10 * 9, bounds.size.h/20 },      .size = { bounds.size.w, 25 } });
+	team2_name_text_layer = text_layer_create((GRect)  { .origin = { bounds.size.w/10,     bounds.size.h/20 * 16 }, .size = { bounds.size.w, 25 } });
 	team2_score_text_layer = text_layer_create((GRect) { .origin = { bounds.size.w/10 * 9, bounds.size.h/20 * 16 }, .size = { bounds.size.w, 25 } });
+	gameTime_text_layer = text_layer_create((GRect)    { .origin = { bounds.size.w/3 ,     bounds.size.h/2},        .size = { bounds.size.w, 25 } });
+	gameHalf_text_layer = text_layer_create((GRect)    { .origin = { bounds.size.w/3 ,     bounds.size.h/2 - 15},   .size = { bounds.size.w, 25 } });;
 
   // Set Font
   text_layer_set_font(team1_name_text_layer, fonts_get_system_font(FONT_KEY_GOTHIC_24));
   text_layer_set_font(team1_score_text_layer, fonts_get_system_font(FONT_KEY_GOTHIC_24));
   text_layer_set_font(team2_name_text_layer, fonts_get_system_font(FONT_KEY_GOTHIC_24));
   text_layer_set_font(team2_score_text_layer, fonts_get_system_font(FONT_KEY_GOTHIC_24));
+  text_layer_set_font(gameTime_text_layer, fonts_get_system_font(FONT_KEY_GOTHIC_24));
+  text_layer_set_font(gameHalf_text_layer, fonts_get_system_font(FONT_KEY_GOTHIC_24));
 
   // Set Text Layer Values
   text_layer_set_text(team1_name_text_layer, "Team1");
-	text_layer_set_text(team1_score_text_layer, itoa1(team1Score));
+	text_layer_set_text(team1_score_text_layer, convertTeam1Score(team1Score));
 	text_layer_set_text(team2_name_text_layer, "Team2");
-	text_layer_set_text(team2_score_text_layer, itoa2(team2Score));
+	text_layer_set_text(team2_score_text_layer, convertTeam2Score(team2Score));
+	
 
   // Add Text Layer Childs to Window
   layer_add_child(window_layer, text_layer_get_layer(team1_name_text_layer));
 	layer_add_child(window_layer, text_layer_get_layer(team1_score_text_layer));
 	layer_add_child(window_layer, text_layer_get_layer(team2_name_text_layer));
 	layer_add_child(window_layer, text_layer_get_layer(team2_score_text_layer));
+	layer_add_child(window_layer, text_layer_get_layer(gameTime_text_layer));
+	layer_add_child(window_layer, text_layer_get_layer(gameHalf_text_layer));
 }
 
 static void window_unload(Window *window) {
@@ -116,6 +148,8 @@ static void window_unload(Window *window) {
 	text_layer_destroy(team1_score_text_layer);
 	text_layer_destroy(team2_name_text_layer);
 	text_layer_destroy(team2_score_text_layer);
+	text_layer_destroy(gameTime_text_layer);
+	text_layer_destroy(gameHalf_text_layer);
 }
 
 static void init(void) {

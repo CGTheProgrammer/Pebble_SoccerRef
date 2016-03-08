@@ -4,6 +4,7 @@
         ""
     ],
     "companyName": "cris.rules@icloud.com",
+    "enableMultiJS": false,
     "longName": "SoccerReferee",
     "projectType": "native",
     "resources": {
