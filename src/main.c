@@ -11,10 +11,11 @@ static TextLayer *team2_name_text_layer;
 static TextLayer *team2_score_text_layer;
 static TextLayer *gameTime_text_layer;
 static TextLayer *gameHalf_text_layer;
+static AppTimer  *gameTime;
+int gameHalf; 
 int team1Score;
 int team2Score;
-int timeLeft;
-int gameHalf;
+
 
 static void update_time() {
   // Get a tm structure
@@ -85,6 +86,10 @@ char *convertTeam2Score(int num){
   return string;
 }
 
+static void timer_callback(void *data) {
+  text_layer_set_text(gameTime_text_layer, "Guess that's that.");
+}
+
 static void select_click_handler(ClickRecognizerRef recognizer, void *context) {
   // Pause Time
 
@@ -106,17 +111,18 @@ static void click_config_provider(void *context) {
   window_single_click_subscribe(BUTTON_ID_DOWN, down_click_handler);
 }
 
-static void window_load(Window *window) {
+static void main_window_load(Window *window) {
   Layer *window_layer = window_get_root_layer(window);
   GRect bounds = layer_get_bounds(window_layer);
+	gameTime = app_timer_register(1500, timer_callback, NULL);
 
   // Create Text Layers
   team1_name_text_layer = text_layer_create((GRect)  { .origin = { bounds.size.w/10,     bounds.size.h/20 },      .size = { bounds.size.w, 25 } });
 	team1_score_text_layer = text_layer_create((GRect) { .origin = { bounds.size.w/10 * 9, bounds.size.h/20 },      .size = { bounds.size.w, 25 } });
 	team2_name_text_layer = text_layer_create((GRect)  { .origin = { bounds.size.w/10,     bounds.size.h/20 * 16 }, .size = { bounds.size.w, 25 } });
 	team2_score_text_layer = text_layer_create((GRect) { .origin = { bounds.size.w/10 * 9, bounds.size.h/20 * 16 }, .size = { bounds.size.w, 25 } });
-	gameTime_text_layer = text_layer_create((GRect)    { .origin = { bounds.size.w/3 ,     bounds.size.h/2},        .size = { bounds.size.w, 25 } });
-	gameHalf_text_layer = text_layer_create((GRect)    { .origin = { bounds.size.w/3 ,     bounds.size.h/2 - 15},   .size = { bounds.size.w, 25 } });;
+	gameTime_text_layer = text_layer_create((GRect)    { .origin = { bounds.size.w/7 ,     bounds.size.h/2 - 10},   .size = { bounds.size.w, 25 } });
+	gameHalf_text_layer = text_layer_create((GRect)    { .origin = { bounds.size.w/2 ,     bounds.size.h/2 - 15},   .size = { bounds.size.w, 15 } });;
 
   // Set Font
   text_layer_set_font(team1_name_text_layer, fonts_get_system_font(FONT_KEY_GOTHIC_24));
@@ -142,7 +148,7 @@ static void window_load(Window *window) {
 	layer_add_child(window_layer, text_layer_get_layer(gameHalf_text_layer));
 }
 
-static void window_unload(Window *window) {
+static void main_window_unload(Window *window) {
   // Destroy Text Layers
   text_layer_destroy(team1_name_text_layer);
 	text_layer_destroy(team1_score_text_layer);
@@ -160,8 +166,8 @@ static void init(void) {
   window = window_create();
   window_set_click_config_provider(window, click_config_provider);
   window_set_window_handlers(window, (WindowHandlers) {
-	.load = window_load,
-    .unload = window_unload,
+	.load = main_window_load,
+    .unload = main_window_unload,
   });
   const bool animated = true;
   window_stack_push(window, animated);
