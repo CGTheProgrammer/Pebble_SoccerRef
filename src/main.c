@@ -4,6 +4,8 @@
 #define TEAM2_PSCORE 2
 #define DEFAULT_SCORE 0
 
+#include "windows/goal_or_card_choice.h"
+
 static Window *window;
 static TextLayer *team1_name_text_layer;
 static TextLayer *team1_score_text_layer;
@@ -12,14 +14,14 @@ static TextLayer *team2_score_text_layer;
 static TextLayer *gameTime_text_layer;
 static TextLayer *gameHalf_text_layer;
 static AppTimer  *gameTime;
-int gameHalf; 
+int gameHalf;
 int team1Score;
 int team2Score;
 
 
 static void update_time() {
   // Get a tm structure
-  time_t temp = time(NULL); 
+  time_t temp = time(NULL);
   struct tm *tick_time = localtime(&temp);
 
   // Create a long-lived buffer
@@ -137,7 +139,7 @@ static void main_window_load(Window *window) {
 	text_layer_set_text(team1_score_text_layer, convertTeam1Score(team1Score));
 	text_layer_set_text(team2_name_text_layer, "Team2");
 	text_layer_set_text(team2_score_text_layer, convertTeam2Score(team2Score));
-	
+
 
   // Add Text Layer Childs to Window
   layer_add_child(window_layer, text_layer_get_layer(team1_name_text_layer));
