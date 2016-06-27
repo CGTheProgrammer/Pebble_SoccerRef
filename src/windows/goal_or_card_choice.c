@@ -1,4 +1,4 @@
-/**
+/*
  * Example implementation of the dialog choice UI pattern.
  */
 
@@ -16,7 +16,7 @@ static void window_load(Window *window) {
   Layer *window_layer = window_get_root_layer(window);
   GRect bounds = layer_get_bounds(window_layer);
 
-  s_icon_bitmap = gbitmap_create_with_resource(RESOURCE_ID_CONFIRM);
+  //s_icon_bitmap = gbitmap_create_with_resource(RESOURCE_ID_CONFIRM);
 
   const GEdgeInsets icon_insets = {.top = 7, .right = 28, .bottom = 56, .left = 14};
   s_icon_layer = bitmap_layer_create(grect_inset(bounds, icon_insets));
@@ -32,8 +32,8 @@ static void window_load(Window *window) {
   text_layer_set_font(s_label_layer, fonts_get_system_font(FONT_KEY_GOTHIC_24_BOLD));
   layer_add_child(window_layer, text_layer_get_layer(s_label_layer));
 
-  s_tick_bitmap = gbitmap_create_with_resource(RESOURCE_ID_TICK);
-  s_cross_bitmap = gbitmap_create_with_resource(RESOURCE_ID_CROSS);
+  //s_tick_bitmap = gbitmap_create_with_resource(RESOURCE_ID_TICK);
+  //s_cross_bitmap = gbitmap_create_with_resource(RESOURCE_ID_CROSS);
 
   s_action_bar_layer = action_bar_layer_create();
   action_bar_layer_set_icon(s_action_bar_layer, BUTTON_ID_UP, s_tick_bitmap);

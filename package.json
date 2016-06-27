@@ -1,0 +1,35 @@
+{
+    "author": "cris.rules@icloud.com",
+    "dependencies": {},
+    "keywords": [],
+    "name": "soccerreferee",
+    "pebble": {
+        "capabilities": [
+            ""
+        ],
+        "displayName": "SoccerReferee",
+        "enableMultiJS": false,
+        "messageKeys": {},
+        "projectType": "native",
+        "resources": {
+            "media": [
+                {
+                    "file": "fonts/sansation.zip",
+                    "name": "FONT_REGULAR_SANSATION_48",
+                    "targetPlatforms": null,
+                    "type": "font"
+                }
+            ]
+        },
+        "sdkVersion": "3",
+        "targetPlatforms": [
+            "aplite",
+            "basalt"
+        ],
+        "uuid": "653cad22-4ad2-441b-b862-9d7c54d41b43",
+        "watchapp": {
+            "watchface": false
+        }
+    },
+    "version": "1.0.0"
+}
