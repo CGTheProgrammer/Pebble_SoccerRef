@@ -134,9 +134,6 @@ static void select_callback(struct MenuLayer *menu_layer, MenuIndex *cell_index,
     case 0:
       list_message_window_push();
       break;
-    case 1:
-      list_message_window_push();
-      break;
     default:
       break;
   }
