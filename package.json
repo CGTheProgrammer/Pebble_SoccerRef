@@ -14,6 +14,18 @@
         "resources": {
             "media": [
                 {
+                    "file": "images/tick_white.png",
+                    "name": "TICK_WHITE",
+                    "targetPlatforms": null,
+                    "type": "png-trans"
+                },
+                {
+                    "file": "images/tick_black.png",
+                    "name": "TICK_BLACK",
+                    "targetPlatforms": null,
+                    "type": "png-trans"
+                },
+                {
                     "file": "fonts/sansation.zip",
                     "name": "FONT_REGULAR_SANSATION_48",
                     "targetPlatforms": null,
