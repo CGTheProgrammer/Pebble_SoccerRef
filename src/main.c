@@ -1,11 +1,12 @@
 #include <pebble.h>
-#include <list_message_window.h>
-#include <checkbox_window.h>
+#include "list_message_window.h"
+#include "checkbox_window.h"
+#include "ref_calls_window.h"
 
 #define TEAM1_PSCORE 1
 #define TEAM2_PSCORE 2
 #define DEFAULT_SCORE 0
-#define NUM_WINDOWS 10
+#define NUM_WINDOWS 3
 
 
 static Window *window;
@@ -103,52 +104,13 @@ static void timer_callback(void *data) {
  
 }
 
-
-
-static uint16_t get_num_rows_callback(MenuLayer *menu_layer, uint16_t section_index, void *context) {
-  return NUM_WINDOWS;
-}
-
-static int16_t get_cell_height_callback(struct MenuLayer *menu_layer, MenuIndex *cell_index, void *context) {
-  return PBL_IF_ROUND_ELSE(
-    menu_layer_is_index_selected(menu_layer, cell_index) ?
-      MENU_CELL_ROUND_FOCUSED_SHORT_CELL_HEIGHT : MENU_CELL_ROUND_UNFOCUSED_TALL_CELL_HEIGHT,
-    CHECKBOX_WINDOW_CELL_HEIGHT);
-}
-
-static void draw_row_callback(GContext *ctx, const Layer *cell_layer, MenuIndex *cell_index, void *context) {
-  switch(cell_index->row) {
-    case 0:
-      menu_cell_basic_draw(ctx, cell_layer, "List Message", NULL, NULL);
-      break;
-    case 1:
-      menu_cell_basic_draw(ctx, cell_layer, "List Message", NULL, NULL);
-      break;
-    default:
-      break;
-  }
-}
-
-static void select_callback(struct MenuLayer *menu_layer, MenuIndex *cell_index, void *context) {
-  switch(cell_index->row) {
-    case 0:
-      list_message_window_push();
-      break;
-    default:
-      break;
-  }
-}
-
-
-
 static void select_click_handler(ClickRecognizerRef recognizer, void *context) {
   // Pause Time
 
 }
 
 static void up_click_handler(ClickRecognizerRef recognizer, void *context) {
-  team1Score++;
-	text_layer_set_text(team1_score_text_layer, convertTeam1Score(team1Score));
+  ref_calls_window_push();
 }
 
 static void down_click_handler(ClickRecognizerRef recognizer, void *context) {
@@ -169,16 +131,16 @@ static void main_window_load(Window *window) {
 	gameTime = app_timer_register(1500, timer_callback, NULL);
 	static GFont time_font;
 	time_font = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_REGULAR_SANSATION_48));
-	// 
-	menu_layer = menu_layer_create(bounds);
-	menu_layer_set_click_config_onto_window(menu_layer, window);
-	menu_layer_set_callbacks(menu_layer, NULL, (MenuLayerCallbacks) {
-      .get_num_rows = get_num_rows_callback,
-      .draw_row = draw_row_callback,
-      .get_cell_height = get_cell_height_callback,
-      .select_click = select_callback,
-  });
-	layer_add_child(window_layer, menu_layer_get_layer(menu_layer));
+// 	// 
+// 	menu_layer = menu_layer_create(bounds);
+// 	menu_layer_set_click_config_onto_window(menu_layer, window);
+// 	menu_layer_set_callbacks(menu_layer, NULL, (MenuLayerCallbacks) {
+//       .get_num_rows = get_num_rows_callback,
+//       .draw_row = draw_row_callback,
+//       .get_cell_height = get_cell_height_callback,
+//       .select_click = select_callback,
+//   });
+// 	layer_add_child(window_layer, menu_layer_get_layer(menu_layer));
 
   // Create Text Layers
   team1_name_text_layer = text_layer_create((GRect)  { .origin = { bounds.size.w/10,     bounds.size.h/20 },      .size = { bounds.size.w,   25 } });
