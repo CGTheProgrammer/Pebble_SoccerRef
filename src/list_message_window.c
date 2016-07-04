@@ -9,7 +9,7 @@
 static Window *main_window;
 static MenuLayer *menu_layer;
 
-static GBitmap *s_tick_black_bitmap, *s_tick_white_bitmap;
+static GBitmap *tick_black_bitmap, *tick_white_bitmap;
 static bool s_selections[CHECKBOX_WINDOW_NUM_ROWS];
 
 static uint16_t get_num_rows_callback(MenuLayer *menu_layer, uint16_t section_index, void *context) {
@@ -27,10 +27,10 @@ static void draw_row_callback(GContext *ctx, const Layer *cell_layer, MenuIndex 
     menu_cell_basic_draw(ctx, cell_layer, s_buff, NULL, NULL);
 
     // Selected?
-    GBitmap *ptr = s_tick_black_bitmap;
+    GBitmap *ptr = tick_black_bitmap;
     if(menu_cell_layer_is_highlighted(cell_layer)) {
       graphics_context_set_stroke_color(ctx, GColorWhite);
-      ptr = s_tick_white_bitmap;
+      ptr = tick_white_bitmap;
     }
 
     GRect bounds = layer_get_bounds(cell_layer);
@@ -75,8 +75,8 @@ static void window_load(Window *window) {
   Layer *window_layer = window_get_root_layer(window);
   GRect bounds = layer_get_bounds(window_layer);
 
-  s_tick_black_bitmap = gbitmap_create_with_resource(RESOURCE_ID_TICK_BLACK);
-  s_tick_white_bitmap = gbitmap_create_with_resource(RESOURCE_ID_TICK_WHITE);
+  tick_black_bitmap = gbitmap_create_with_resource(RESOURCE_ID_TICK_BLACK);
+  tick_white_bitmap = gbitmap_create_with_resource(RESOURCE_ID_TICK_WHITE);
 
   menu_layer = menu_layer_create(bounds);
   menu_layer_set_click_config_onto_window(menu_layer, window);
@@ -92,8 +92,8 @@ static void window_load(Window *window) {
 static void window_unload(Window *window) {
   menu_layer_destroy(menu_layer);
 
-  gbitmap_destroy(s_tick_black_bitmap);
-  gbitmap_destroy(s_tick_white_bitmap);
+  gbitmap_destroy(tick_black_bitmap);
+  gbitmap_destroy(tick_white_bitmap);
 
   window_destroy(window);
   main_window = NULL;

@@ -17,13 +17,13 @@
                     "file": "images/tick_white.png",
                     "name": "TICK_WHITE",
                     "targetPlatforms": null,
-                    "type": "png-trans"
+                    "type": "png"
                 },
                 {
                     "file": "images/tick_black.png",
                     "name": "TICK_BLACK",
                     "targetPlatforms": null,
-                    "type": "png-trans"
+                    "type": "png"
                 },
                 {
                     "file": "fonts/sansation.zip",
