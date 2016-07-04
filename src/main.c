@@ -1,5 +1,4 @@
 #include <pebble.h>
-#include "list_message_window.h"
 #include "checkbox_window.h"
 #include "ref_calls_window.h"
 
@@ -10,7 +9,6 @@
 
 
 static Window *window;
-static MenuLayer *menu_layer;
 static TextLayer *team1_name_text_layer;
 static TextLayer *team1_score_text_layer;
 static TextLayer *team2_name_text_layer;
@@ -125,22 +123,11 @@ static void click_config_provider(void *context) {
 }
 
 static void main_window_load(Window *window) {
-  //
 	Layer *window_layer = window_get_root_layer(window);
   GRect bounds = layer_get_bounds(window_layer);
 	gameTime = app_timer_register(1500, timer_callback, NULL);
 	static GFont time_font;
 	time_font = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_REGULAR_SANSATION_48));
-// 	// 
-// 	menu_layer = menu_layer_create(bounds);
-// 	menu_layer_set_click_config_onto_window(menu_layer, window);
-// 	menu_layer_set_callbacks(menu_layer, NULL, (MenuLayerCallbacks) {
-//       .get_num_rows = get_num_rows_callback,
-//       .draw_row = draw_row_callback,
-//       .get_cell_height = get_cell_height_callback,
-//       .select_click = select_callback,
-//   });
-// 	layer_add_child(window_layer, menu_layer_get_layer(menu_layer));
 
   // Create Text Layers
   team1_name_text_layer = text_layer_create((GRect)  { .origin = { bounds.size.w/10,     bounds.size.h/20 },      .size = { bounds.size.w,   25 } });
@@ -214,7 +201,7 @@ static void deinit(void) {
   // Persistantly Save Team Scores
   persist_write_int(TEAM1_PSCORE, team1Score);
   persist_write_int(TEAM2_PSCORE, team2Score);
-
+	
   window_destroy(window);
 }
 

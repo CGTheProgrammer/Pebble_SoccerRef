@@ -50,10 +50,6 @@ static void window_load(Window *window) {
 
   menu_layer = menu_layer_create(bounds);
   menu_layer_set_click_config_onto_window(menu_layer, window);
-#if defined(PBL_COLOR)
-  menu_layer_set_normal_colors(menu_layer, GColorBlack, GColorWhite);
-  menu_layer_set_highlight_colors(menu_layer, GColorRed, GColorWhite);
-#endif
   menu_layer_set_callbacks(menu_layer, NULL, (MenuLayerCallbacks) {
       .get_num_rows = get_num_rows_callback,
       .draw_row = draw_row_callback,
