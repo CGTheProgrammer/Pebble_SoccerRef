@@ -104,16 +104,21 @@ static void timer_callback(void *data) {
 
 static void select_click_handler(ClickRecognizerRef recognizer, void *context) {
   // Pause Time
+	team1Score++;
+	team2Score++;
+	text_layer_set_text(team1_score_text_layer, convertTeam1Score(team1Score));
+	text_layer_set_text(team2_score_text_layer, convertTeam2Score(team2Score));
 
 }
 
 static void up_click_handler(ClickRecognizerRef recognizer, void *context) {
-  ref_calls_window_push();
+	int team = 1;
+  ref_calls_window_push(team);
 }
 
 static void down_click_handler(ClickRecognizerRef recognizer, void *context) {
-  team2Score++;
-	text_layer_set_text(team2_score_text_layer, convertTeam2Score(team2Score));
+	int team = 2;
+  ref_calls_window_push(team);
 }
 
 static void click_config_provider(void *context) {
@@ -128,6 +133,8 @@ static void main_window_load(Window *window) {
 	gameTime = app_timer_register(1500, timer_callback, NULL);
 	static GFont time_font;
 	time_font = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_REGULAR_SANSATION_48));
+	
+	window_set_click_config_provider(window, click_config_provider);
 
   // Create Text Layers
   team1_name_text_layer = text_layer_create((GRect)  { .origin = { bounds.size.w/10,     bounds.size.h/20 },      .size = { bounds.size.w,   25 } });
@@ -166,6 +173,8 @@ static void main_window_load(Window *window) {
 	layer_add_child(window_layer, text_layer_get_layer(team2_score_text_layer));
 	layer_add_child(window_layer, text_layer_get_layer(gameTime_text_layer));
 	layer_add_child(window_layer, text_layer_get_layer(gameHalf_text_layer));
+	
+	window_set_click_config_provider(window, click_config_provider);
 }
 
 static void main_window_unload(Window *window) {

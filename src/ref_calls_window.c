@@ -4,6 +4,30 @@
 
 static Window *main_window;
 static MenuLayer *menu_layer;
+int team;
+
+char *int2String(int num){
+  static char buff[20] = {};
+  int i = 0, temp_num = num, length = 0;
+  char *string = buff;
+
+  if(num > 0) {
+		// count how many characters in the number
+    while(temp_num) {
+      temp_num /= 10;
+      length++;
+    }
+    // assign the number to the buffer starting at the end of the number
+    for(i = 0; i < length; i++) {
+      buff[(length-1)-i] = '0' + (num % 10);
+      num /= 10;
+    }
+    buff[i] = '\0'; // can't forget the null byte to properly end our string
+  }else{
+    string = "0";
+  }
+  return string;
+}
 
 static uint16_t get_num_rows_callback(MenuLayer *menu_layer, uint16_t section_index, void *context) {
   return NUM_WINDOWS;
@@ -35,12 +59,12 @@ static void select_callback(struct MenuLayer *menu_layer, MenuIndex *cell_index,
     case 0:
       checkbox_window_push();
       break;
-//     case 1:
-//       dialog_choice_window_push();
-//       break;
-//     case 2:
-//       dialog_message_window_push();
-//       break;
+    case 1:
+      checkbox_window_push();
+      break;
+    case 2:
+      checkbox_window_push();
+      break;
   }
 }
 
@@ -63,7 +87,8 @@ static void window_unload(Window *window) {
   menu_layer_destroy(menu_layer);
 }
 
-void ref_calls_window_push() {
+void ref_calls_window_push(int teamNum) {
+	team = teamNum;
 	if(!main_window){
 		main_window = window_create();
 		window_set_window_handlers(main_window, (WindowHandlers) {
