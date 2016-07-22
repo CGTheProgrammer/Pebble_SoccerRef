@@ -28,12 +28,18 @@ static int next_lap_layer = 0;
 static int lap_time_count = 0;
 static double last_lap_time = 0;
 
+#define FONT_BIG_TIME RESOURCE_ID_FONT_DEJAVU_SANS_BOLD_SUBSET_30
+#define FONT_SECONDS  RESOURCE_ID_FONT_DEJAVU_SANS_SUBSET_18
+#define FONT_LAPS     RESOURCE_ID_FONT_DEJAVU_SANS_SUBSET_22
+
 // Keeping Track of Time
 static double elapsed_time = 0;
 static bool started = false;
 static AppTimer* update_timer = NULL;
 static double start_time = 0;
 static double pause_time = 0;
+
+#define TIMER_UPDATE 1
 
 // Global Animation Lock.
 static int busy_animating = 0;
