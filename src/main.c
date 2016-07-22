@@ -7,18 +7,42 @@
 #define DEFAULT_SCORE 0
 #define NUM_WINDOWS 3
 
-
 static Window *window;
+
+// Team Displays
 static TextLayer *team1_name_text_layer;
 static TextLayer *team1_score_text_layer;
 static TextLayer *team2_name_text_layer;
 static TextLayer *team2_score_text_layer;
+
+// Game Info Display
 static TextLayer *gameTime_text_layer;
 static TextLayer *gameHalf_text_layer;
 static AppTimer  *gameTime;
+
+// Time Display
+#define LAP_TIME_SIZE 5
+static char lap_times[LAP_TIME_SIZE][11] = {"00:00:00.0", "00:01:00.0", "00:02:00.0", "00:03:00.0", "00:04:00.0"};
+static TextLayer* lap_layers[LAP_TIME_SIZE]; // temporary layer
+static int next_lap_layer = 0;
+static int lap_time_count = 0;
+static double last_lap_time = 0;
+
+// Keeping Track of Time
+static double elapsed_time = 0;
+static bool started = false;
+static AppTimer* update_timer = NULL;
+static double start_time = 0;
+static double pause_time = 0;
+
+// Global Animation Lock.
+static int busy_animating = 0;
+
+// Global Varialbes
 int gameHalf;
 int team1Score;
 int team2Score;
+
 
 
 static void update_time() {
@@ -99,7 +123,7 @@ char *convertTeam2Score(int num){
 }
 
 static void timer_callback(void *data) {
- 
+
 }
 
 static void select_click_handler(ClickRecognizerRef recognizer, void *context) {
@@ -133,7 +157,7 @@ static void main_window_load(Window *window) {
 	gameTime = app_timer_register(1500, timer_callback, NULL);
 	static GFont time_font;
 	time_font = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_REGULAR_SANSATION_48));
-	
+
 	window_set_click_config_provider(window, click_config_provider);
 
   // Create Text Layers
@@ -158,14 +182,14 @@ static void main_window_load(Window *window) {
 	text_layer_set_text(team2_name_text_layer, "Team2");
 	text_layer_set_text(team2_score_text_layer, convertTeam2Score(team2Score));
 	text_layer_set_text(gameHalf_text_layer, "1");
-	
+
 	// Ensures time is displayed immediately (will break if NULL tick event accessed).
   // (This is why it's a good idea to have a separate routine to do the update itself.)
  	time_t now = time(NULL);
   struct tm *current_time = localtime(&now);
   handle_second_tick(current_time, SECOND_UNIT);
   tick_timer_service_subscribe(SECOND_UNIT, handle_second_tick);
-	
+
   // Add Text Layer Childs to Window
   layer_add_child(window_layer, text_layer_get_layer(team1_name_text_layer));
 	layer_add_child(window_layer, text_layer_get_layer(team1_score_text_layer));
@@ -173,14 +197,14 @@ static void main_window_load(Window *window) {
 	layer_add_child(window_layer, text_layer_get_layer(team2_score_text_layer));
 	layer_add_child(window_layer, text_layer_get_layer(gameTime_text_layer));
 	layer_add_child(window_layer, text_layer_get_layer(gameHalf_text_layer));
-	
+
 	window_set_click_config_provider(window, click_config_provider);
 }
 
 static void main_window_unload(Window *window) {
   // Unsubscribe from services
 	tick_timer_service_unsubscribe();
-	
+
 	// Destroy Text Layers
   text_layer_destroy(team1_name_text_layer);
 	text_layer_destroy(team1_score_text_layer);
@@ -196,6 +220,7 @@ static void init(void) {
   team2Score = persist_exists(TEAM2_PSCORE) ? persist_read_int(TEAM2_PSCORE) : DEFAULT_SCORE;
 
   window = window_create();
+  window_set_fullscreen(window, true);
   window_set_click_config_provider(window, click_config_provider);
   window_set_window_handlers(window, (WindowHandlers) {
 	.load = main_window_load,
@@ -203,6 +228,25 @@ static void init(void) {
   });
   const bool animated = true;
   window_stack_push(window, animated);
+
+
+  // Fonts
+  big_font = fonts_load_custom_font(resource_get_handle(FONT_BIG_TIME));
+  seconds_font = fonts_load_custom_font(resource_get_handle(FONT_SECONDS));
+  laps_font = fonts_load_custom_font(resource_get_handle(FONT_LAPS));
+
+
+  // Set up the lap time layers. These will be made visible later.
+  for(int i = 0; i < LAP_TIME_SIZE; ++i) {
+	   lap_layers[i] = text_layer_create(GRect(-139, 52, 139, 30));
+
+      text_layer_set_background_color(lap_layers[i], GColorClear)
+      text_layer_set_font(lap_layers[i], laps_font);
+      text_layer_set_text_color(lap_layers[i], GColorWhite);
+      text_layer_set_text(lap_layers[i], lap_times[i]);
+      layer_add_child(root_layer, (Layer*)lap_layers[i]);
+    }
+
 }
 
 
@@ -210,7 +254,7 @@ static void deinit(void) {
   // Persistantly Save Team Scores
   persist_write_int(TEAM1_PSCORE, team1Score);
   persist_write_int(TEAM2_PSCORE, team2Score);
-	
+
   window_destroy(window);
 }
 
