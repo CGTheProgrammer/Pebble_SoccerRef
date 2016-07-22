@@ -1,5 +1,5 @@
 {
-    "author": "cris.rules@icloud.com",
+    "author": "CGTheLegend",
     "dependencies": {},
     "keywords": [],
     "name": "soccerreferee",
@@ -14,7 +14,7 @@
         "resources": {
             "media": [
                 {
-                    "file": "fonts/DejaVuSans.ttf",
+                    "file": "fonts/DejaVuSans-Bold.ttf",
                     "name": "DEJAVU_SANS_BOLD_SUBSET_30",
                     "targetPlatforms": null,
                     "type": "font"
