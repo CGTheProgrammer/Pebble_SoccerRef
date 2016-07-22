@@ -7,6 +7,10 @@
 #define DEFAULT_SCORE 0
 #define NUM_WINDOWS 3
 
+#define FONT_BIG_TIME RESOURCE_ID_FONT_DEJAVU_SANS_BOLD_SUBSET_30
+#define FONT_SECONDS  RESOURCE_ID_FONT_DEJAVU_SANS_SUBSET_18
+#define FONT_LAPS     RESOURCE_ID_FONT_DEJAVU_SANS_SUBSET_22
+
 static Window *window;
 
 // Team Displays
@@ -28,9 +32,7 @@ static int next_lap_layer = 0;
 static int lap_time_count = 0;
 static double last_lap_time = 0;
 
-#define FONT_BIG_TIME RESOURCE_ID_FONT_DEJAVU_SANS_BOLD_SUBSET_30
-#define FONT_SECONDS  RESOURCE_ID_FONT_DEJAVU_SANS_SUBSET_18
-#define FONT_LAPS     RESOURCE_ID_FONT_DEJAVU_SANS_SUBSET_22
+
 
 // Keeping Track of Time
 static double elapsed_time = 0;
@@ -224,9 +226,14 @@ static void init(void) {
   // Set Score Values ? Persisent Exist Set Score
   team1Score = persist_exists(TEAM1_PSCORE) ? persist_read_int(TEAM1_PSCORE) : DEFAULT_SCORE;
   team2Score = persist_exists(TEAM2_PSCORE) ? persist_read_int(TEAM2_PSCORE) : DEFAULT_SCORE;
+	
+	// Root Layer
+	Layer *root_layer = window_get_root_layer(window);
 
   window = window_create();
-  window_set_fullscreen(window, true);
+  #ifdef PBL_SDK_2
+	window_set_fullscreen(my_window, true);
+	#endif
   window_set_click_config_provider(window, click_config_provider);
   window_set_window_handlers(window, (WindowHandlers) {
 	.load = main_window_load,
@@ -246,7 +253,7 @@ static void init(void) {
   for(int i = 0; i < LAP_TIME_SIZE; ++i) {
 	   lap_layers[i] = text_layer_create(GRect(-139, 52, 139, 30));
 
-      text_layer_set_background_color(lap_layers[i], GColorClear)
+      text_layer_set_background_color(lap_layers[i], GColorClear);
       text_layer_set_font(lap_layers[i], laps_font);
       text_layer_set_text_color(lap_layers[i], GColorWhite);
       text_layer_set_text(lap_layers[i], lap_times[i]);

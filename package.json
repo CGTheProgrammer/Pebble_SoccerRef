@@ -14,6 +14,24 @@
         "resources": {
             "media": [
                 {
+                    "file": "fonts/DejaVuSans.ttf",
+                    "name": "DEJAVU_SANS_BOLD_SUBSET_30",
+                    "targetPlatforms": null,
+                    "type": "font"
+                },
+                {
+                    "file": "fonts/DejaVuSans.ttf",
+                    "name": "DEJAVU_SANS_SUBSET_22",
+                    "targetPlatforms": null,
+                    "type": "font"
+                },
+                {
+                    "file": "fonts/DejaVuSans.ttf",
+                    "name": "DEJAVU_SANS_SUBSET_18",
+                    "targetPlatforms": null,
+                    "type": "font"
+                },
+                {
                     "file": "images/tick_white.png",
                     "name": "TICK_WHITE",
                     "targetPlatforms": null,
