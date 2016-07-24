@@ -51,6 +51,11 @@ int gameHalf;
 int team1Score;
 int team2Score;
 
+// Fonts
+static GFont big_font;
+static GFont seconds_font;
+static GFont laps_font;
+
 
 
 static void update_time() {

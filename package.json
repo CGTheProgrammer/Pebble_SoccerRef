@@ -14,24 +14,6 @@
         "resources": {
             "media": [
                 {
-                    "file": "fonts/DejaVuSans-Bold.ttf",
-                    "name": "DEJAVU_SANS_BOLD_SUBSET_30",
-                    "targetPlatforms": null,
-                    "type": "font"
-                },
-                {
-                    "file": "fonts/DejaVuSans.ttf",
-                    "name": "DEJAVU_SANS_SUBSET_22",
-                    "targetPlatforms": null,
-                    "type": "font"
-                },
-                {
-                    "file": "fonts/DejaVuSans.ttf",
-                    "name": "DEJAVU_SANS_SUBSET_18",
-                    "targetPlatforms": null,
-                    "type": "font"
-                },
-                {
                     "file": "images/tick_white.png",
                     "name": "TICK_WHITE",
                     "targetPlatforms": null,
@@ -46,6 +28,24 @@
                 {
                     "file": "fonts/sansation.zip",
                     "name": "FONT_REGULAR_SANSATION_48",
+                    "targetPlatforms": null,
+                    "type": "font"
+                },
+                {
+                    "file": "fonts/DejaVuSans.ttf",
+                    "name": "FONT_DEJAVU_SANS_SUBSET_22",
+                    "targetPlatforms": null,
+                    "type": "font"
+                },
+                {
+                    "file": "fonts/DejaVuSans.ttf",
+                    "name": "FONT_DEJAVU_SANS_SUBSET_18",
+                    "targetPlatforms": null,
+                    "type": "font"
+                },
+                {
+                    "file": "fonts/DejaVuSans-Bold.ttf",
+                    "name": "FONT_DEJAVU_SANS_BOLD_SUBSET_30",
                     "targetPlatforms": null,
                     "type": "font"
                 }
