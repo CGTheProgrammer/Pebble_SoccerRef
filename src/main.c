@@ -32,8 +32,6 @@ static int next_lap_layer = 0;
 static int lap_time_count = 0;
 static double last_lap_time = 0;
 
-
-
 // Keeping Track of Time
 static double elapsed_time = 0;
 static bool started = false;
@@ -188,6 +186,9 @@ static void main_window_load(Window *window) {
   text_layer_set_font(team2_score_text_layer, fonts_get_system_font(FONT_KEY_GOTHIC_24));
   text_layer_set_font(gameTime_text_layer, time_font);
   text_layer_set_font(gameHalf_text_layer, fonts_get_system_font(FONT_KEY_GOTHIC_24));
+  big_font     = fonts_load_custom_font(resource_get_handle(FONT_BIG_TIME));
+  seconds_font = fonts_load_custom_font(resource_get_handle(FONT_SECONDS));
+  laps_font    = fonts_load_custom_font(resource_get_handle(FONT_LAPS));
 
   // Set Text Layer Values
   text_layer_set_text(team1_name_text_layer, "Team1");
@@ -231,7 +232,7 @@ static void init(void) {
   // Set Score Values ? Persisent Exist Set Score
   team1Score = persist_exists(TEAM1_PSCORE) ? persist_read_int(TEAM1_PSCORE) : DEFAULT_SCORE;
   team2Score = persist_exists(TEAM2_PSCORE) ? persist_read_int(TEAM2_PSCORE) : DEFAULT_SCORE;
-	
+
 	// Root Layer
 	Layer *root_layer = window_get_root_layer(window);
 
@@ -246,13 +247,6 @@ static void init(void) {
   });
   const bool animated = true;
   window_stack_push(window, animated);
-
-
-  // Fonts
-  big_font = fonts_load_custom_font(resource_get_handle(FONT_BIG_TIME));
-  seconds_font = fonts_load_custom_font(resource_get_handle(FONT_SECONDS));
-  laps_font = fonts_load_custom_font(resource_get_handle(FONT_LAPS));
-
 
   // Set up the lap time layers. These will be made visible later.
   for(int i = 0; i < LAP_TIME_SIZE; ++i) {
