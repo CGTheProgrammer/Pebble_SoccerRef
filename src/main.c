@@ -31,6 +31,8 @@ static TextLayer* lap_layers[LAP_TIME_SIZE]; // temporary layer
 static int next_lap_layer = 0;
 static int lap_time_count = 0;
 static double last_lap_time = 0;
+static TextLayer* big_time_layer;
+static TextLayer* seconds_time_layer;
 
 // Keeping Track of Time
 static double elapsed_time = 0;
@@ -211,6 +213,33 @@ static void main_window_load(Window *window) {
 	layer_add_child(window_layer, text_layer_get_layer(team2_score_text_layer));
 	layer_add_child(window_layer, text_layer_get_layer(gameTime_text_layer));
 	layer_add_child(window_layer, text_layer_get_layer(gameHalf_text_layer));
+	
+	// Set up the lap time layers. These will be made visible later.
+  for(int i = 0; i < LAP_TIME_SIZE; ++i) {
+	   lap_layers[i] = text_layer_create(GRect(-139, 52, 139, 30));
+
+      text_layer_set_background_color(lap_layers[i], GColorClear);
+      text_layer_set_font(lap_layers[i], laps_font);
+      text_layer_set_text_color(lap_layers[i], GColorWhite);
+      text_layer_set_text(lap_layers[i], lap_times[i]);
+      layer_add_child(window_layer, (Layer*)lap_layers[i]);
+  }
+	
+	// Set up the big timer.
+	big_time_layer = text_layer_create(GRect(0, 5, 96, 35));
+  text_layer_set_background_color(big_time_layer, GColorBlack);
+  text_layer_set_font(big_time_layer, big_font);
+  text_layer_set_text_color(big_time_layer, GColorWhite);
+  text_layer_set_text(big_time_layer, "00:00");
+  text_layer_set_text_alignment(big_time_layer, GTextAlignmentRight);
+  layer_add_child(window_layer, (Layer*)big_time_layer);
+
+  seconds_time_layer = text_layer_create(GRect(96, 17, 49, 35));
+  text_layer_set_background_color(seconds_time_layer, GColorBlack);
+  text_layer_set_font(seconds_time_layer, seconds_font);
+  text_layer_set_text_color(seconds_time_layer, GColorWhite);
+  text_layer_set_text(seconds_time_layer, ".0");
+  layer_add_child(window_layer, (Layer*)seconds_time_layer);
 
 	window_set_click_config_provider(window, click_config_provider);
 }
@@ -247,17 +276,6 @@ static void init(void) {
   });
   const bool animated = true;
   window_stack_push(window, animated);
-
-  // Set up the lap time layers. These will be made visible later.
-  for(int i = 0; i < LAP_TIME_SIZE; ++i) {
-	   lap_layers[i] = text_layer_create(GRect(-139, 52, 139, 30));
-
-      text_layer_set_background_color(lap_layers[i], GColorClear);
-      text_layer_set_font(lap_layers[i], laps_font);
-      text_layer_set_text_color(lap_layers[i], GColorWhite);
-      text_layer_set_text(lap_layers[i], lap_times[i]);
-      layer_add_child(root_layer, (Layer*)lap_layers[i]);
-    }
 
 }
 

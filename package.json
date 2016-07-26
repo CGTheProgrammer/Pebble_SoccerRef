@@ -33,13 +33,13 @@
                 },
                 {
                     "file": "fonts/DejaVuSans.ttf",
-                    "name": "FONT_DEJAVU_SANS_SUBSET_22",
+                    "name": "FONT_DEJAVU_SANS_SUBSET_18",
                     "targetPlatforms": null,
                     "type": "font"
                 },
                 {
                     "file": "fonts/DejaVuSans.ttf",
-                    "name": "FONT_DEJAVU_SANS_SUBSET_18",
+                    "name": "FONT_DEJAVU_SANS_SUBSET_22",
                     "targetPlatforms": null,
                     "type": "font"
                 },
