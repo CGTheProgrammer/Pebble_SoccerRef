@@ -20,7 +20,6 @@ static TextLayer *team2_name_text_layer;
 static TextLayer *team2_score_text_layer;
 
 // Game Info Display
-static TextLayer *gameTime_text_layer;
 static TextLayer *gameHalf_text_layer;
 static AppTimer  *gameTime;
 
@@ -75,17 +74,9 @@ static void update_time() {
     strftime(buffer, sizeof("00:00"), "%I:%M", tick_time);
   }
 
-  // Display this time on the TextLayer
-  text_layer_set_text(gameTime_text_layer, buffer);
+  
 }
 
-static void handle_second_tick(struct tm* tick_time, TimeUnits units_changed) {
-  // Needs to be static because it's used by the system later.
-  static char game_time_text[] = "00:00:00";
-
-  strftime(game_time_text, sizeof(game_time_text), "%T", tick_time);
-  text_layer_set_text(gameTime_text_layer, game_time_text);
-}
 
 // Converts team1 score to a string
 char *convertTeam1Score(int num){
@@ -141,10 +132,6 @@ static void timer_callback(void *data) {
 
 static void select_click_handler(ClickRecognizerRef recognizer, void *context) {
   // Pause Time
-	team1Score++;
-	team2Score++;
-	text_layer_set_text(team1_score_text_layer, convertTeam1Score(team1Score));
-	text_layer_set_text(team2_score_text_layer, convertTeam2Score(team2Score));
 
 }
 
@@ -168,25 +155,20 @@ static void main_window_load(Window *window) {
 	Layer *window_layer = window_get_root_layer(window);
   GRect bounds = layer_get_bounds(window_layer);
 	gameTime = app_timer_register(1500, timer_callback, NULL);
-	static GFont time_font;
-	time_font = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_REGULAR_SANSATION_48));
-
 	window_set_click_config_provider(window, click_config_provider);
 
   // Create Text Layers
-  team1_name_text_layer = text_layer_create((GRect)  { .origin = { bounds.size.w/10,     bounds.size.h/20 },      .size = { bounds.size.w,   25 } });
-	team1_score_text_layer = text_layer_create((GRect) { .origin = { bounds.size.w/10 * 9, bounds.size.h/20 },      .size = { bounds.size.w/4, 25 } });
-	team2_name_text_layer = text_layer_create((GRect)  { .origin = { bounds.size.w/10,     bounds.size.h/20 * 16},  .size = { bounds.size.w,   25 } });
-	team2_score_text_layer = text_layer_create((GRect) { .origin = { bounds.size.w/10 * 9, bounds.size.h/20 * 16},  .size = { bounds.size.w/4, 25 } });
-	gameTime_text_layer = text_layer_create((GRect)    { .origin = { bounds.size.w/7,      bounds.size.h/2 - 13},   .size = { bounds.size.w, bounds.size.h/3} });
-	gameHalf_text_layer = text_layer_create((GRect)    { .origin = { bounds.size.w/5,      bounds.size.h/2 - 45},   .size = { bounds.size.w/4, 25 } });
+  team1_name_text_layer  = text_layer_create((GRect)  { .origin = { bounds.size.w/10,     bounds.size.h/20 },      .size = { bounds.size.w,   25 } });
+	team1_score_text_layer = text_layer_create((GRect)  { .origin = { bounds.size.w/10 * 9, bounds.size.h/20 },      .size = { bounds.size.w/4, 25 } });
+	team2_name_text_layer  = text_layer_create((GRect)  { .origin = { bounds.size.w/10,     bounds.size.h/20 * 16},  .size = { bounds.size.w,   25 } });
+	team2_score_text_layer = text_layer_create((GRect)  { .origin = { bounds.size.w/10 * 9, bounds.size.h/20 * 16},  .size = { bounds.size.w/4, 25 } });
+	gameHalf_text_layer    = text_layer_create((GRect)  { .origin = { bounds.size.w/5,      bounds.size.h/2 - 45},   .size = { bounds.size.w/4, 25 } });
 
   // Set Font
   text_layer_set_font(team1_name_text_layer, fonts_get_system_font(FONT_KEY_GOTHIC_24));
   text_layer_set_font(team1_score_text_layer, fonts_get_system_font(FONT_KEY_GOTHIC_24));
   text_layer_set_font(team2_name_text_layer, fonts_get_system_font(FONT_KEY_GOTHIC_24));
   text_layer_set_font(team2_score_text_layer, fonts_get_system_font(FONT_KEY_GOTHIC_24));
-  text_layer_set_font(gameTime_text_layer, time_font);
   text_layer_set_font(gameHalf_text_layer, fonts_get_system_font(FONT_KEY_GOTHIC_24));
   big_font     = fonts_load_custom_font(resource_get_handle(FONT_BIG_TIME));
   seconds_font = fonts_load_custom_font(resource_get_handle(FONT_SECONDS));
@@ -203,26 +185,22 @@ static void main_window_load(Window *window) {
   // (This is why it's a good idea to have a separate routine to do the update itself.)
  	time_t now = time(NULL);
   struct tm *current_time = localtime(&now);
-  handle_second_tick(current_time, SECOND_UNIT);
-  tick_timer_service_subscribe(SECOND_UNIT, handle_second_tick);
 
   // Add Text Layer Childs to Window
   layer_add_child(window_layer, text_layer_get_layer(team1_name_text_layer));
 	layer_add_child(window_layer, text_layer_get_layer(team1_score_text_layer));
 	layer_add_child(window_layer, text_layer_get_layer(team2_name_text_layer));
 	layer_add_child(window_layer, text_layer_get_layer(team2_score_text_layer));
-	layer_add_child(window_layer, text_layer_get_layer(gameTime_text_layer));
 	layer_add_child(window_layer, text_layer_get_layer(gameHalf_text_layer));
 	
 	// Set up the lap time layers. These will be made visible later.
   for(int i = 0; i < LAP_TIME_SIZE; ++i) {
-	   lap_layers[i] = text_layer_create(GRect(-139, 52, 139, 30));
-
-      text_layer_set_background_color(lap_layers[i], GColorClear);
-      text_layer_set_font(lap_layers[i], laps_font);
-      text_layer_set_text_color(lap_layers[i], GColorWhite);
-      text_layer_set_text(lap_layers[i], lap_times[i]);
-      layer_add_child(window_layer, (Layer*)lap_layers[i]);
+		lap_layers[i] = text_layer_create( (GRect) {.origin = { bounds.size.w/7, bounds.size.h/2 - 13}, .size = { bounds.size.w, 30} });
+//     text_layer_set_background_color(lap_layers[i], GColorClear);
+    text_layer_set_font(lap_layers[i], laps_font);
+//     text_layer_set_text_color(lap_layers[i], GColorWhite);
+    text_layer_set_text(lap_layers[i], lap_times[i]);
+    layer_add_child(window_layer, (Layer*)lap_layers[i]);
   }
 	
 	// Set up the big timer.
@@ -253,7 +231,6 @@ static void main_window_unload(Window *window) {
 	text_layer_destroy(team1_score_text_layer);
 	text_layer_destroy(team2_name_text_layer);
 	text_layer_destroy(team2_score_text_layer);
-	text_layer_destroy(gameTime_text_layer);
 	text_layer_destroy(gameHalf_text_layer);
 }
 
