@@ -7,7 +7,7 @@
 #define DEFAULT_SCORE 0
 #define NUM_WINDOWS 3
 
-#define FONT_BIG_TIME RESOURCE_ID_FONT_DEJAVU_SANS_BOLD_SUBSET_30
+#define FONT_BIG_TIME RESOURCE_ID_FONT_DEJAVU_SANS_BOLD_SUBSET_42
 #define FONT_SECONDS  RESOURCE_ID_FONT_DEJAVU_SANS_SUBSET_18
 #define FONT_LAPS     RESOURCE_ID_FONT_DEJAVU_SANS_SUBSET_22
 
@@ -25,11 +25,8 @@ static AppTimer  *gameTime;
 
 // Time Display
 #define LAP_TIME_SIZE 5
-static char lap_times[LAP_TIME_SIZE][11] = {"00:00:00.0", "00:01:00.0", "00:02:00.0", "00:03:00.0", "00:04:00.0"};
+static char lap_times[LAP_TIME_SIZE][11] = {"00:00:00.0", "00:01:00.0", "00:02:00.0", "00:03:00.0", "00:05:00.0"};
 static TextLayer* lap_layers[LAP_TIME_SIZE]; // temporary layer
-static int next_lap_layer = 0;
-static int lap_time_count = 0;
-static double last_lap_time = 0;
 static TextLayer* big_time_layer;
 static TextLayer* seconds_time_layer;
 
@@ -63,7 +60,7 @@ static void update_time() {
   struct tm *tick_time = localtime(&temp);
 
   // Create a long-lived buffer
-  static char buffer[] = "00:00";
+  static char buffer[] = "04:20";
 
   // Write the current hours and minutes into the buffer
   if(clock_is_24h_style() == true) {
@@ -72,9 +69,7 @@ static void update_time() {
   } else {
     //Use 12 hour format
     strftime(buffer, sizeof("00:00"), "%I:%M", tick_time);
-  }
-
-  
+  }  
 }
 
 
@@ -193,31 +188,13 @@ static void main_window_load(Window *window) {
 	layer_add_child(window_layer, text_layer_get_layer(team2_score_text_layer));
 	layer_add_child(window_layer, text_layer_get_layer(gameHalf_text_layer));
 	
-	// Set up the lap time layers. These will be made visible later.
-  for(int i = 0; i < LAP_TIME_SIZE; ++i) {
-		lap_layers[i] = text_layer_create( (GRect) {.origin = { bounds.size.w/7, bounds.size.h/2 - 13}, .size = { bounds.size.w, 30} });
-//     text_layer_set_background_color(lap_layers[i], GColorClear);
-    text_layer_set_font(lap_layers[i], laps_font);
-//     text_layer_set_text_color(lap_layers[i], GColorWhite);
-    text_layer_set_text(lap_layers[i], lap_times[i]);
-    layer_add_child(window_layer, (Layer*)lap_layers[i]);
-  }
-	
 	// Set up the big timer.
-	big_time_layer = text_layer_create(GRect(0, 5, 96, 35));
-  text_layer_set_background_color(big_time_layer, GColorBlack);
+	big_time_layer = text_layer_create(GRect(0, bounds.size.h/3 * 1.2, 140, 45));
   text_layer_set_font(big_time_layer, big_font);
-  text_layer_set_text_color(big_time_layer, GColorWhite);
+  text_layer_set_text_color(big_time_layer, GColorBlack);
   text_layer_set_text(big_time_layer, "00:00");
   text_layer_set_text_alignment(big_time_layer, GTextAlignmentRight);
   layer_add_child(window_layer, (Layer*)big_time_layer);
-
-  seconds_time_layer = text_layer_create(GRect(96, 17, 49, 35));
-  text_layer_set_background_color(seconds_time_layer, GColorBlack);
-  text_layer_set_font(seconds_time_layer, seconds_font);
-  text_layer_set_text_color(seconds_time_layer, GColorWhite);
-  text_layer_set_text(seconds_time_layer, ".0");
-  layer_add_child(window_layer, (Layer*)seconds_time_layer);
 
 	window_set_click_config_provider(window, click_config_provider);
 }
@@ -243,9 +220,6 @@ static void init(void) {
 	Layer *root_layer = window_get_root_layer(window);
 
   window = window_create();
-  #ifdef PBL_SDK_2
-	window_set_fullscreen(my_window, true);
-	#endif
   window_set_click_config_provider(window, click_config_provider);
   window_set_window_handlers(window, (WindowHandlers) {
 	.load = main_window_load,

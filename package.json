@@ -4,9 +4,6 @@
     "keywords": [],
     "name": "soccerreferee",
     "pebble": {
-        "capabilities": [
-            ""
-        ],
         "displayName": "SoccerReferee",
         "enableMultiJS": false,
         "messageKeys": {},
@@ -45,7 +42,7 @@
                 },
                 {
                     "file": "fonts/DejaVuSans-Bold.ttf",
-                    "name": "FONT_DEJAVU_SANS_BOLD_SUBSET_30",
+                    "name": "FONT_DEJAVU_SANS_BOLD_SUBSET_42",
                     "targetPlatforms": null,
                     "type": "font"
                 }
